@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "pmsim configuration",
+  "type": "object",
+  "required": ["beam", "detector", "geometry", "sample"],
+  "additionalProperties": false,
+  "properties": {
+    "beam": {
+      "type": "object",
+      "required": ["energy_keV", "focal_spot"],
+      "additionalProperties": false,
+      "properties": {
+        "energy_keV": { "type": "number", "exclusiveMinimum": 0 },
+        "spectrum": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": { "type": "number" }
+              }
+            }
+          ]
+        },
+        "divergence_mrad": { "type": "number", "minimum": 0 },
+        "focal_spot": {
+          "type": "object",
+          "required": ["size_um", "shape"],
+          "additionalProperties": false,
+          "properties": {
+            "size_um": { "type": "number", "minimum": 0 },
+            "shape": {
+              "type": "string",
+              "enum": ["gaussian", "uniform_disk", "uniform_square", "point"]
+            }
+          }
+        }
+      }
+    },
+    "detector": {
+      "type": "object",
+      "required": ["pixels", "pixel_size_um"],
+      "additionalProperties": false,
+      "properties": {
+        "pixels": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": { "type": "integer", "minimum": 1 }
+        },
+        "pixel_size_um": { "type": "number", "exclusiveMinimum": 0 },
+        "objective_magnification": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Visible-light lens magnification for an indirect (scintillator+lens+camera) detector. Default 1 = direct detection. The footprint of one camera pixel at the scintillator plane is pixel_size_um / objective_magnification."
+        },
+        "efficiency": {
+          "oneOf": [
+            { "type": "number", "minimum": 0, "maximum": 1 },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": { "type": "number" }
+              }
+            }
+          ]
+        },
+        "read_noise_e": { "type": "number", "minimum": 0 },
+        "include_poisson": { "type": "boolean" }
+      }
+    },
+    "geometry": {
+      "type": "object",
+      "required": ["source_to_sample_mm", "sample_to_detector_mm"],
+      "additionalProperties": false,
+      "properties": {
+        "source_to_sample_mm": { "type": "number", "exclusiveMinimum": 0 },
+        "sample_to_detector_mm": { "type": "number", "minimum": 0 }
+      }
+    },
+    "sample": {
+      "type": "object",
+      "required": ["type", "voxel_size_um"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string", "enum": ["voxel"] },
+        "delta_path": { "type": "string" },
+        "beta_path": { "type": "string" },
+        "voxel_size_um": { "type": "number", "exclusiveMinimum": 0 },
+        "axis_order": { "type": "string", "enum": ["zyx", "xyz"] }
+      }
+    },
+    "simulation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source_samples": { "type": "integer", "minimum": 1 },
+        "n_photons_per_pixel": { "type": "number", "minimum": 0 },
+        "seed": { "type": "integer" },
+        "fft_padding": { "type": "integer", "minimum": 1 },
+        "dtype": { "type": "string", "enum": ["complex64", "complex128"] },
+        "device": {
+          "type": "string",
+          "enum": ["cpu", "cuda", "auto"],
+          "description": "Compute backend: 'cpu' (NumPy/SciPy FFT), 'cuda' (CuPy on GPU, requires cupy), or 'auto' (cuda if available else cpu)."
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string" },
+        "save_intermediate": { "type": "boolean" }
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+build/
+dist/
+.eggs/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# --- editable installs / virtualenvs ---
+.venv/
+venv/
+env/
+.python-version
+
+# --- pmsim runtime outputs and phantoms ---
+# All TIFFs (simulator outputs, flat-fields, phantoms) — too large to track.
+*.tif
+*.tiff
+*.h5
+*.hdf5
+*.npy
+*.npz
+
+# --- editor / OS ---
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# --- logs / scratch ---
+*.log
+.tmp/
+scratch/

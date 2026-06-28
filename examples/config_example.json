@@ -1,0 +1,39 @@
+{
+  "beam": {
+    "energy_keV": 30.0,
+    "focal_spot": {
+      "size_um": 5.0,
+      "shape": "gaussian"
+    },
+    "divergence_mrad": 1.0
+  },
+  "detector": {
+    "pixels": [512, 512],
+    "pixel_size_um": 6.5,
+    "efficiency": 0.85,
+    "read_noise_e": 2.0,
+    "include_poisson": true
+  },
+  "geometry": {
+    "source_to_sample_mm": 100.0,
+    "sample_to_detector_mm": 500.0
+  },
+  "sample": {
+    "type": "voxel",
+    "delta_path": "phantom_delta.tif",
+    "beta_path": "phantom_beta.tif",
+    "voxel_size_um": 0.5,
+    "axis_order": "zyx"
+  },
+  "simulation": {
+    "source_samples": 32,
+    "n_photons_per_pixel": 5000,
+    "seed": 7,
+    "fft_padding": 2,
+    "dtype": "complex64"
+  },
+  "output": {
+    "path": "projection.tif",
+    "save_intermediate": true
+  }
+}
